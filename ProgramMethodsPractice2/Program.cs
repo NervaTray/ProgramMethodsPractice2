@@ -36,6 +36,17 @@ class Graph
         return 0;
     }
     
+    // Возвращает вершину с индексом i из множества вершин, смежных с v.
+    public Vertex VERTEX(string vertexName, int index)
+    {
+        for (int i = 0; i < edgeList.Count; i++)
+        {
+            if (edgeList[i].vert1.name == vertexName && edgeList[i].index == index) return edgeList[i].vert2;
+        }
+
+        return vertexList[0];
+    }
+    
     // Добавляет Вершину.
     public void ADD_V(string name, string mark)
     {
@@ -100,7 +111,7 @@ class Graph
         if (findEdge(begVert, endVert) != null) return; 
         
         // Назначение индекса для смежного узла
-        edge.index = 0;
+        edge.index = 1;
         for (int i = 0; i < edgeList.Count; i++)
         {
             if (edgeList[i].vert1.name == begVert && edgeList[i].index >= edge.index) edge.index = edgeList[i].index + 1;
@@ -243,15 +254,10 @@ class Program
         graph.ADD_E("A", "C");
         graph.ADD_E("B", "D");
         graph.ADD_E("C", "D");
-
+        
         graph.PrintEdgeList();
-        graph.PrintEdgeInfo("A", "H");
-        graph.PrintEdgeInfo("A", "C");
-        graph.PrintVertexInfo("A");
-        graph.PrintVertexInfo("G");
-      
-
-        Console.WriteLine(graph.FIRST("A"));
-        Console.WriteLine(graph.NEXT("A", 0));
+        
+        Console.WriteLine(graph.VERTEX("A", 2).name);
+        Console.WriteLine(graph.VERTEX("A", 4).name);
     }
 }

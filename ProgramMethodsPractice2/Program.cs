@@ -121,6 +121,68 @@ class Graph
         edgeList.Add(edge);
     }
     
+    // Метод удаляет узел.
+    public void DEL_V(string vertexName)
+    {
+        if (findVertex(vertexName) == null) return;
+        
+        // Удаляет узел из списка узлов.
+        for (int i = 0; i < vertexList.Count; i++)
+        {
+            if (vertexList[i].name == vertexName)
+            {
+                vertexList.RemoveAt(i);
+                break;
+            }
+        }
+
+        // Удаляет дуги, связанные с удаленным узлом, а также меняет индексы там, где это необходимо.
+        int length = edgeList.Count;
+        for (int i = 0; i < length; i++)
+        {
+            if (edgeList[i].vert1.name == vertexName)
+            {
+                DEL_E(vertexName, edgeList[i].vert2.name);
+                length--;
+                i--;
+                continue;
+            }
+
+            if (edgeList[i].vert2.name == vertexName)
+            {
+                DEL_E(edgeList[i].vert1.name, vertexName);
+                length--;
+                i--;
+            }
+        }
+    }
+    
+    // Метод удаляет дугу.
+    // Также данный метод меняет индексы у узлов смежных с начальным узлом, удаляемой дуги.
+    public void DEL_E(string begVert, string endVert)
+    {
+        int temp_index = 0;
+        int length = edgeList.Count;
+        // Удаляет элемент из списка.
+        for (int i = 0; i < length; i++)
+        {
+            if (edgeList[i].vert1.name == begVert && edgeList[i].vert2.name == endVert)
+            {
+                temp_index = edgeList[i].index;
+                edgeList.RemoveAt(i);
+                break;
+            }
+        }
+        // В случае если никакой элемент не удалился, значит что подобной дуги нет и можно выходить из метода.
+        if ((length - edgeList.Count) == 0) return;
+        
+        // Меняет индексы.
+        for (int i = 0; i < edgeList.Count; i++)
+        {
+            if (edgeList[i].vert1.name == begVert && edgeList[i].index > temp_index) edgeList[i].index--;
+        }
+    }
+
     // Печатает инфо по узлу.
     public void PrintVertexInfo(string name)
     {
@@ -151,10 +213,29 @@ class Graph
     // Печатает список дуг
     public void PrintEdgeList()
     {
+        if (edgeList.Count == 0)
+        {
+            Console.WriteLine("Список дуг пуст.");
+            return;
+        }
         for (int i = 0; i < edgeList.Count; i++)
         {
             Console.WriteLine("{0}. BegVert: (name: {1}, mark: {2})\tEndVert: (name: {3}, mark: {4}, index: {5})\tWeight: {6}", 
                 i + 1, edgeList[i].vert1.name, edgeList[i].vert1.mark, edgeList[i].vert2.name, edgeList[i].vert2.mark, edgeList[i].index, edgeList[i].weight);
+        }
+    }
+    
+    // Печатает список Узлов
+    public void PrintVertexList()
+    {
+        if (vertexList.Count == 0)
+        {
+            Console.WriteLine("Список узлов пуст.");
+            return;
+        }
+        for (int i = 0; i < vertexList.Count; i++)
+        {
+            Console.WriteLine("{0}. Vertex: (name: {1}, mark: {2})", i + 1, vertexList[i].name, vertexList[i].mark);
         }
     }
     
@@ -249,15 +330,25 @@ class Program
         graph.ADD_V("B", "m");
         graph.ADD_V("C", "m");
         graph.ADD_V("D", "m");
+        graph.ADD_V("E", "m");
+        graph.ADD_V("F", "m");
+        graph.ADD_V("G", "m");
+        graph.ADD_V("H", "m");
         
         graph.ADD_E("A", "B");
         graph.ADD_E("A", "C");
         graph.ADD_E("B", "D");
         graph.ADD_E("C", "D");
+        graph.ADD_E("C", "A");
+        graph.ADD_E("A", "E");
+        graph.ADD_E("A", "F");
+        graph.ADD_E("C", "G");
+        graph.ADD_E("A", "H");
+        
         
         graph.PrintEdgeList();
-        
-        Console.WriteLine(graph.VERTEX("A", 2).name);
-        Console.WriteLine(graph.VERTEX("A", 4).name);
+        graph.DEL_V("A");
+        Console.WriteLine();
+        graph.PrintEdgeList();
     }
 }

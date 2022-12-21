@@ -1,0 +1,15 @@
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\bin\Debug\net6.0\ProgramMethodsPractice2.exe
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\bin\Debug\net6.0\ProgramMethodsPractice2.deps.json
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\bin\Debug\net6.0\ProgramMethodsPractice2.runtimeconfig.json
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\bin\Debug\net6.0\ProgramMethodsPractice2.dll
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\bin\Debug\net6.0\ProgramMethodsPractice2.pdb
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.csproj.AssemblyReference.cache
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.AssemblyInfoInputs.cache
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.AssemblyInfo.cs
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.csproj.CoreCompileInputs.cache
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.dll
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\refint\ProgramMethodsPractice2.dll
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.pdb
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ProgramMethodsPractice2.genruntimeconfig.cache
+C:\Users\gyper\RiderProjects\ProgramMethodsPractice2\ProgramMethodsPractice2\obj\Debug\net6.0\ref\ProgramMethodsPractice2.dll

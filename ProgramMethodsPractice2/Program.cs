@@ -182,6 +182,18 @@ class Graph
             if (edgeList[i].vert1.name == begVert && edgeList[i].index > temp_index) edgeList[i].index--;
         }
     }
+    
+    // Изменение метки в узле.
+    public void EDIT_V(string vertexName, string mark)
+    {
+        if (findVertex(vertexName) != null) findVertex(vertexName).mark = mark;
+    }
+    
+    // Изменение веса дуги
+    public void EDIT_E(string begVert, string endVert, int weight)
+    {
+        if (findEdge(begVert, endVert) != null) findEdge(begVert, endVert).weight = weight;
+    }
 
     // Печатает инфо по узлу.
     public void PrintVertexInfo(string name)
@@ -347,7 +359,9 @@ class Program
         
         
         graph.PrintEdgeList();
-        graph.DEL_V("A");
+        graph.EDIT_V("A", "change");
+        graph.EDIT_E("A", "B", 6);
+        graph.EDIT_E("H", "DF", 23);
         Console.WriteLine();
         graph.PrintEdgeList();
     }

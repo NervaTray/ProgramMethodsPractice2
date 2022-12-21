@@ -13,6 +13,30 @@ class Graph
     private int index;                      // Индекс для узлов.
     
     
+    // Возвращает индекс первой вершины, смежной с введенной вершиной.
+    // Если вершина не имеет смежных вершин, то возвращается нулевая вершина.
+    public int FIRST(string vertexName)
+    {
+        for (int i = 0; i < edgeList.Count; i++)
+        {
+            if (edgeList[i].vert1.name == vertexName) return edgeList[i].vert2.Index;
+        }
+
+        return 0;
+    }
+    
+    // Возвращает индекс вершины, смежной с вершиной v, следующий за индексом i.
+    // Если i — это индекс последней вершины, смежной с вершиной v, то возвращается 0.
+    public int NEXT(string vertexName, int index)
+    {
+        for (int i = 0; i < edgeList.Count; i++)
+        {
+            if (edgeList[i].vert1.name == vertexName && edgeList[i].vert2.Index > index) return edgeList[i].vert2.Index;
+        }
+
+        return 0;
+    }
+    
     // Добавляет Вершину.
     public void ADD_V(string name, string mark)
     {
@@ -31,7 +55,6 @@ class Graph
         // Создание нового узла и его добавление в список узлов.
         Vertex vertex = new Vertex(name, mark, index);
         vertexList.Add(vertex);
-        // Увеличение счетчика индекса для узлов.
         index++;
     }
     
@@ -82,7 +105,6 @@ class Graph
         edgeList.Add(edge);
     }
     
-    
     // Печатает инфо по узлу.
     public void PrintVertexInfo(string name)
     {
@@ -95,7 +117,6 @@ class Graph
         
         Console.WriteLine("Vertex: (name: {0}, mark: {1}, index {2})", temp.name, temp.mark, temp.Index);
     }
-    
     
     // Печатает инфо по дуге.
     public void PrintEdgeInfo(string begVert, string endVert)
@@ -111,7 +132,6 @@ class Graph
             temp.vert1.name, temp.vert1.mark, temp.vert1.Index, temp.vert2.name, temp.vert2.mark, temp.vert2.Index, temp.weight);
     }
     
-    
     // Печатает список дуг
     public void PrintEdgeList()
     {
@@ -121,7 +141,6 @@ class Graph
                 i + 1, edgeList[i].vert1.name, edgeList[i].vert1.mark, edgeList[i].vert1.Index, edgeList[i].vert2.name, edgeList[i].vert2.mark, edgeList[i].vert2.Index, edgeList[i].weight);
         }
     }
-    
     
     // Проверяет является ли узел "нулевым".
     // Возвращает true если элемент нулевой, в противном случае возвращает false.
@@ -175,6 +194,7 @@ class Edge
     public Vertex vert1;        // Начальный узел
     public Vertex vert2;        // Конечный узел
     public int weight;          // Вес дуги
+    
 
 }
 
@@ -184,7 +204,7 @@ class Vertex
 {
     public string name;     // Имя узла
     public string mark;     // Название метки
-    private int index;      // Индекс узла
+    private int index;
 
     public int Index => index;
 
@@ -214,8 +234,6 @@ class Program
     {
         Graph graph = new Graph();
         
-        
-        
         graph.ADD_V("A", "m");
         graph.ADD_V("B", "m");
         graph.ADD_V("C", "m");
@@ -225,13 +243,10 @@ class Program
         graph.ADD_E("A", "C");
         graph.ADD_E("B", "D");
         graph.ADD_E("C", "D");
-        graph.ADD_E("C", "D");
-        
+
         graph.PrintEdgeList();
-        
-        graph.PrintVertexInfo("G");
-        graph.PrintVertexInfo("A");
-        graph.PrintEdgeInfo("A", "G");
-        graph.PrintEdgeInfo("A", "B");
+
+        Console.WriteLine(graph.FIRST("A"));
+        Console.WriteLine(graph.NEXT("A", 2));
     }
 }

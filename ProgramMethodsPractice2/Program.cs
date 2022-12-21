@@ -48,7 +48,7 @@ class Graph
     }
     
     // Добавляет Вершину.
-    public void ADD_V(string name, string mark)
+    public void ADD_V(string name, int mark)
     {
         // Проверка на нулевой элемент.
         // В случае, если пользователь пытается добавить элемент NULL, появляется ошибка.
@@ -184,7 +184,7 @@ class Graph
     }
     
     // Изменение метки в узле.
-    public void EDIT_V(string vertexName, string mark)
+    public void EDIT_V(string vertexName, int mark)
     {
         if (findVertex(vertexName) != null) findVertex(vertexName).mark = mark;
     }
@@ -290,7 +290,7 @@ class Graph
         edgeList = new List<Edge>();
         vertexList = new List<Vertex>();
         this.oriented = oriented;
-        Vertex nullVertex = new Vertex("NULL", "NULL");
+        Vertex nullVertex = new Vertex("NULL", 0);
         vertexList.Add(nullVertex);
     }
 }
@@ -311,10 +311,10 @@ class Edge
 class Vertex
 {
     public string name;     // Имя узла
-    public string mark;     // Название метки
+    public int mark;     // Название метки
 
     // Конструктор.
-    public Vertex(string name, string mark)
+    public Vertex(string name, int mark)
     {
         this.name = name;
         this.mark = mark;
@@ -338,31 +338,6 @@ class Program
     {
         Graph graph = new Graph();
         
-        graph.ADD_V("A", "m");
-        graph.ADD_V("B", "m");
-        graph.ADD_V("C", "m");
-        graph.ADD_V("D", "m");
-        graph.ADD_V("E", "m");
-        graph.ADD_V("F", "m");
-        graph.ADD_V("G", "m");
-        graph.ADD_V("H", "m");
         
-        graph.ADD_E("A", "B");
-        graph.ADD_E("A", "C");
-        graph.ADD_E("B", "D");
-        graph.ADD_E("C", "D");
-        graph.ADD_E("C", "A");
-        graph.ADD_E("A", "E");
-        graph.ADD_E("A", "F");
-        graph.ADD_E("C", "G");
-        graph.ADD_E("A", "H");
-        
-        
-        graph.PrintEdgeList();
-        graph.EDIT_V("A", "change");
-        graph.EDIT_E("A", "B", 6);
-        graph.EDIT_E("H", "DF", 23);
-        Console.WriteLine();
-        graph.PrintEdgeList();
     }
 }

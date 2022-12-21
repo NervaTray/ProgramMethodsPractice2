@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
+// Поработать со значением null.
 
 // Реализация АТД граф.
 class Graph
@@ -8,8 +9,8 @@ class Graph
     private List<Edge> edgeList;            // Список дуг.
     private List<Vertex> vertexList;        // Список существующий узлов.
 
-    private bool oriented;
-    private int index;
+    private bool oriented;                  // true - ор.граф, false - не ор.граф.
+    private int index;                      // Индекс для узлов.
     
     
     // Добавляет Вершину.
@@ -45,9 +46,10 @@ class Graph
             
         Edge edge = new Edge();
         edge.weight = weight;
+        
         // Проверка на существование данных узлов.
         // Если введенных узлов не существует, то новая дуга не заносится в список дуг.
-        // Параллельно с проверкой заносятся данные в узел.
+        // Параллельно с проверкой заносятся данные в узлы, находящиеся в объекте класса дуги.
         bool flag = false;
         for (int i = 0; i < vertexList.Count; i++)
         {
@@ -58,7 +60,8 @@ class Graph
                 break;
             }
         }
-        if (!flag) return;
+        // В случае ненахождения узла с заданным именем, выбрасывается исключение.
+        if (!flag) throw new GraphException("Attempted to add edge with non-existent Vertex", begVert);
         flag = false;
         for (int i = 0; i < vertexList.Count; i++)
         {
@@ -69,8 +72,13 @@ class Graph
                 break;
             }
         }
-        if (!flag) return;
+        // В случае ненахождения узла с заданным именем, выбрасывается исключение.
+        if (!flag) throw new GraphException("Attempted to add edge with non-existent Vertex", endVert);
+
+        // В случае если данная дуга уже существует, она не добавляется в список дуг, при этом исключение не выкидывается.
+        if (findEdge(begVert, endVert) != null) return; 
         
+        // Добавление созданной дуги в список дуг.
         edgeList.Add(edge);
     }
     
@@ -79,7 +87,28 @@ class Graph
     public void PrintVertexInfo(string name)
     {
         Vertex temp = findVertex(name);
-        if (temp == null) return;
+        if (temp == null)
+        {
+            Console.WriteLine("Данного узла не существует.");
+            return;
+        }
+        
+        Console.WriteLine("Vertex: (name: {0}, mark: {1}, index {2})", temp.name, temp.mark, temp.Index);
+    }
+    
+    
+    // Печатает инфо по дуге.
+    public void PrintEdgeInfo(string begVert, string endVert)
+    {
+        Edge temp = findEdge(begVert, endVert);
+        if (temp == null)
+        {
+            Console.WriteLine("Данной дуги не существует.");
+            return;
+        }
+        
+        Console.WriteLine("BegVert: (name: {0}, mark: {1}, index: {2})\tEndVert: (name: {3}, mark: {4}, index: {5})\tWeight: {6}",
+            temp.vert1.name, temp.vert1.mark, temp.vert1.Index, temp.vert2.name, temp.vert2.mark, temp.vert2.Index, temp.weight);
     }
     
     
@@ -103,7 +132,8 @@ class Graph
     }
 
     // Поиск узла.
-    private Vertex findVertex(string name)
+    // Если узел не находится, то возвращается null.
+    public Vertex findVertex(string name)
     {
         for (int i = 0; i < vertexList.Count; i++)
         {
@@ -114,7 +144,16 @@ class Graph
     }
     
     // Поиск дуги.
-    //private Edge findEdge()
+    // Если дуга не находится, то возвращается null.
+    public Edge findEdge(string begVert, string endVert)
+    {
+        for (int i = 0; i < edgeList.Count; i++)
+        {
+            if (edgeList[i].vert1.name == begVert && edgeList[i].vert2.name == endVert) return edgeList[i];
+        }
+
+        return null;
+    }
 
 
     // Конструктор.
@@ -174,28 +213,25 @@ class Program
     static void Main()
     {
         Graph graph = new Graph();
-
-        try
-        {
-            graph.ADD_V("NULL", "m");
-        }
-        catch (GraphException ex)
-        {
-            Console.WriteLine(ex.Value);
-            Console.WriteLine(ex.Message);
-        }
         
         
-        // graph.ADD_V("A", "m");
-        // graph.ADD_V("B", "m");
-        // graph.ADD_V("C", "m");
-        // graph.ADD_V("D", "m");
-        //
-        // graph.ADD_E("A", "B");
-        // graph.ADD_E("A", "C");
-        // graph.ADD_E("B", "D");
-        // graph.ADD_E("C", "D");
-        //
-        // graph.PrintEdgeList();
+        
+        graph.ADD_V("A", "m");
+        graph.ADD_V("B", "m");
+        graph.ADD_V("C", "m");
+        graph.ADD_V("D", "m");
+        
+        graph.ADD_E("A", "B");
+        graph.ADD_E("A", "C");
+        graph.ADD_E("B", "D");
+        graph.ADD_E("C", "D");
+        graph.ADD_E("C", "D");
+        
+        graph.PrintEdgeList();
+        
+        graph.PrintVertexInfo("G");
+        graph.PrintVertexInfo("A");
+        graph.PrintEdgeInfo("A", "G");
+        graph.PrintEdgeInfo("A", "B");
     }
 }

@@ -23,6 +23,16 @@ class Graph
 
         return 0;
     }
+
+    public int FIRST(Vertex vertex)
+    {
+        for (int i = 0; i < edgeList.Count; i++)
+        {
+            if (edgeList[i].vert1 == vertex) return edgeList[i].index;
+        }
+
+        return 0;
+    }
     
     // Возвращает индекс вершины, смежной с вершиной v, следующий за индексом i.
     // Если i — это индекс последней вершины, смежной с вершиной v, то возвращается 0.
@@ -31,6 +41,16 @@ class Graph
         for (int i = 0; i < edgeList.Count; i++)
         {
             if (edgeList[i].vert1.name == vertexName && edgeList[i].index > index) return edgeList[i].index;
+        }
+
+        return 0;
+    }
+
+    public int NEXT(Vertex vertex, int index)
+    {
+        for (int i = 0; i < edgeList.Count; i++)
+        {
+            if (edgeList[i].vert1 == vertex && edgeList[i].index > index) return edgeList[i].index;
         }
 
         return 0;
@@ -48,7 +68,7 @@ class Graph
     }
     
     // Добавляет Вершину.
-    public void ADD_V(string name, int mark)
+    public void ADD_V(string name, int mark = 0)
     {
         // Проверка на нулевой элемент.
         // В случае, если пользователь пытается добавить элемент NULL, появляется ошибка.
@@ -271,6 +291,17 @@ class Graph
         return null;
     }
     
+    // Найти смежный узел по индексу.
+    public Vertex findAdjVertex(Vertex vertex, int index)
+    {
+        for (int i = 0; i < vertexList.Count; i++)
+        {
+            if (edgeList[i].vert1 == vertex && edgeList[i].index == index) return edgeList[i].vert2;
+        }
+
+        return null;
+    }
+    
     // Поиск дуги.
     // Если дуга не находится, то возвращается null.
     public Edge findEdge(string begVert, string endVert)
@@ -281,6 +312,49 @@ class Graph
         }
 
         return null;
+    }
+    
+    
+    // Определение всех циклов в графе методом обхода в ширину.
+    public int BFS(Vertex parentVertex)
+    {
+        // Если узла в списке узлов не существует, то обход в ширину не происходит.
+        if (findVertex(parentVertex.name) == null) return -1;
+    
+        // Выставление всем узлам метки 0.
+        // 0 - не пройдено.
+        // 1 - посещается.
+        // 2 - посещено.
+        // -1 - путь не найден.
+        for (int i = 0; i < vertexList.Count; i++)
+            vertexList[i].mark = 0;
+        
+        // Создание очереди узлов.
+        Queue<Vertex> bfs_queue = new Queue<Vertex>();
+        
+        // Занесение начального узла в очередь.
+        bfs_queue.Enqueue(parentVertex);
+        bfs_queue.Peek().mark = 1;
+        
+        // Обход графа.
+        while (bfs_queue.Count > 0)
+        {
+            Vertex v_current = bfs_queue.Peek();
+            for (int i = FIRST(v_current); i > 0; i = NEXT(v_current, i))
+            {
+                Vertex temp = findAdjVertex(v_current, i);
+                if (temp.mark == 0)
+                {
+                    temp.mark = 1;
+                    bfs_queue.Enqueue(temp);
+                }
+            }
+            
+            v_current.mark = 2;
+            PrintVertexInfo(bfs_queue.Dequeue().name);
+        }
+
+        return 0;
     }
 
 
@@ -338,6 +412,33 @@ class Program
     {
         Graph graph = new Graph();
         
+        graph.ADD_V("A");
+        graph.ADD_V("B");
+        graph.ADD_V("C");
+        graph.ADD_V("D");
+        graph.ADD_V("E");
+        graph.ADD_V("F");
         
+        graph.ADD_E("A", "B");
+        graph.ADD_E("A", "F");
+        graph.ADD_E("B", "C");
+        graph.ADD_E("C", "A");
+        graph.ADD_E("C", "D");
+        graph.ADD_E("C", "E");
+        graph.ADD_E("F", "D");
+
+        graph.PrintEdgeList();
+        
+        graph.DEL_E("C", "A");
+        graph.DEL_E("C", "D");
+        graph.ADD_E("C", "D");
+        graph.ADD_E("C", "A");
+        
+        Console.WriteLine();
+        graph.PrintEdgeList();
+        
+        Console.WriteLine("\n\n");
+        graph.BFS(graph.findVertex("A"));
+
     }
 }

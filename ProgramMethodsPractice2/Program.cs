@@ -57,14 +57,14 @@ class Graph
     }
     
     // Возвращает вершину с индексом i из множества вершин, смежных с v.
-    public Vertex VERTEX(string vertexName, int index)
+    public Vertex VERTEX(Vertex vertex, int index)
     {
         for (int i = 0; i < edgeList.Count; i++)
         {
-            if (edgeList[i].vert1.name == vertexName && edgeList[i].index == index) return edgeList[i].vert2;
+            if (edgeList[i].vert1 == vertex && edgeList[i].index == index) return edgeList[i].vert2;
         }
 
-        return vertexList[0];
+        return null;
     }
     
     // Добавляет Вершину.
@@ -290,18 +290,7 @@ class Graph
 
         return null;
     }
-    
-    // Найти смежный узел по индексу.
-    public Vertex findAdjVertex(Vertex vertex, int index)
-    {
-        for (int i = 0; i < vertexList.Count; i++)
-        {
-            if (edgeList[i].vert1 == vertex && edgeList[i].index == index) return edgeList[i].vert2;
-        }
 
-        return null;
-    }
-    
     // Поиск дуги.
     // Если дуга не находится, то возвращается null.
     public Edge findEdge(string begVert, string endVert)
@@ -316,7 +305,7 @@ class Graph
     
     
     // Определение всех циклов в графе методом обхода в ширину.
-    public int BFS(Vertex parentVertex)
+    public int BFS(Vertex parentVertex, bool output = false)
     {
         // Если узла в списке узлов не существует, то обход в ширину не происходит.
         if (findVertex(parentVertex.name) == null) return -1;
@@ -325,9 +314,11 @@ class Graph
         // 0 - не пройдено.
         // 1 - посещается.
         // 2 - посещено.
-        // -1 - путь не найден.
         for (int i = 0; i < vertexList.Count; i++)
             vertexList[i].mark = 0;
+
+        // Счетчик циклов в графе.
+        int cycles_count = 0;
         
         // Создание очереди узлов.
         Queue<Vertex> bfs_queue = new Queue<Vertex>();
@@ -342,19 +333,26 @@ class Graph
             Vertex v_current = bfs_queue.Peek();
             for (int i = FIRST(v_current); i > 0; i = NEXT(v_current, i))
             {
-                Vertex temp = findAdjVertex(v_current, i);
+                Vertex temp = VERTEX(v_current, i);
                 if (temp.mark == 0)
                 {
                     temp.mark = 1;
                     bfs_queue.Enqueue(temp);
                 }
+                else if (temp.mark == 2)
+                {
+                    cycles_count++;
+                }
             }
             
             v_current.mark = 2;
-            PrintVertexInfo(bfs_queue.Dequeue().name);
+            // output - true - осуществляется вывод узлов, которые проходит алгоритм.
+            // output - false - вывод не осуществляется.
+            if (output) PrintVertexInfo(bfs_queue.Dequeue().name);
+            else bfs_queue.Dequeue();
         }
 
-        return 0;
+        return cycles_count;
     }
 
 
@@ -438,7 +436,7 @@ class Program
         graph.PrintEdgeList();
         
         Console.WriteLine("\n\n");
-        graph.BFS(graph.findVertex("A"));
+        Console.WriteLine(graph.BFS(graph.findVertex("A"), true));
 
     }
 }

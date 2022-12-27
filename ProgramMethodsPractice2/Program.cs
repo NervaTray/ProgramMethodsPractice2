@@ -305,7 +305,7 @@ class Graph
     
     
     // Определение всех циклов в графе методом обхода в ширину.
-    public int BFS(Vertex parentVertex, bool output = false)
+    public int BFSCyclesCount(Vertex parentVertex, bool output = false)
     {
         // Если узла в списке узлов не существует, то обход в ширину не происходит.
         if (findVertex(parentVertex.name) == null) return -1;
@@ -339,7 +339,10 @@ class Graph
                     temp.mark = 1;
                     bfs_queue.Enqueue(temp);
                 }
-                else if (temp.mark == 2)
+                // В данном случае, если при обходе алгоритм натыкается на пройденный, узел, то
+                // начинает проверяться наличие пути от смежного с действующим узлом узла до действующего узло.
+                // Если путь существует, значит есть цикл.
+                else if ((temp.mark == 2 || temp.mark == 1) && BFSWayExist(temp, v_current))
                 {
                     cycles_count++;
                 }
@@ -378,14 +381,14 @@ class Graph
             {
                 Vertex temp = VERTEX(v_current, i);
                 if (temp.name == endVertex.name) return true;
-                if (temp.mark == 0)
+                if (temp.mark2 == 0)
                 {
-                    temp.mark = 1;
+                    temp.mark2 = 1;
                     bfsQueue.Enqueue(temp);
                 }
             }
             
-            v_current.mark = 2;
+            v_current.mark2 = 2;
             bfsQueue.Dequeue();
         }
         return false;
@@ -459,8 +462,50 @@ class Program
         graph.ADD_E("5", "3");
         graph.ADD_E("4", "5");
         graph.ADD_E("3", "4");
+        
+        Console.WriteLine(graph.BFSCyclesCount(graph.findVertex("1"), true));
+        Console.WriteLine();
 
-        Console.WriteLine(graph.BFSWayExist(graph.findVertex("5"), graph.findVertex("2")));
+        Graph graph2 = new Graph();
+        
+        graph2.ADD_V("A");
+        graph2.ADD_V("B");
+        graph2.ADD_V("C");
+        graph2.ADD_V("D");
+        graph2.ADD_V("E");
+        graph2.ADD_V("F");
+        
+        graph2.ADD_E("A", "B");
+        graph2.ADD_E("A", "F");
+        graph2.ADD_E("B", "C");
+        graph2.ADD_E("C", "A");
+        graph2.ADD_E("C", "E");
+        graph2.ADD_E("C", "D");
+        graph2.ADD_E("F", "D");
+        
+        Console.WriteLine(graph2.BFSCyclesCount(graph2.findVertex("A"), true));
+        Console.WriteLine();
+
+        Graph graph3 = new Graph();
+        
+        graph3.ADD_V("A");
+        graph3.ADD_V("B");
+        graph3.ADD_V("C");
+        graph3.ADD_V("D");
+        graph3.ADD_V("E");
+        graph3.ADD_V("F");
+        graph3.ADD_V("G");
+        
+        graph3.ADD_E("A", "B");
+        graph3.ADD_E("B", "C");
+        graph3.ADD_E("C", "D");
+        graph3.ADD_E("D", "B");
+        graph3.ADD_E("A", "E");
+        graph3.ADD_E("E", "F");
+        graph3.ADD_E("F", "G");
+        graph3.ADD_E("G", "E");
+        
+        Console.WriteLine(graph3.BFSCyclesCount(graph3.findVertex("A"), true));
 
     }
 }

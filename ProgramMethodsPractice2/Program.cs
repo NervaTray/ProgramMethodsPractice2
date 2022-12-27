@@ -354,6 +354,42 @@ class Graph
 
         return cycles_count;
     }
+    
+    
+    // Нахождение пути между вершинами через BFS.
+    // Если путь между вершинами существует - true.
+    // Если путь НЕ существует - false.
+    public bool BFSWayExist(Vertex startVertex, Vertex endVertex)
+    {
+        // Обнуление костыльных меток.
+        for (int i = 0; i < vertexList.Count; i++)
+            vertexList[i].mark2 = 0;
+        
+        // Создание очереди и занесение в нее стартового узла.
+        Queue<Vertex> bfsQueue = new Queue<Vertex>();
+        bfsQueue.Enqueue(startVertex);
+        bfsQueue.Peek().mark2 = 1;
+
+        while (bfsQueue.Count > 0)
+        {
+            Vertex v_current = bfsQueue.Peek();
+            
+            for (int i = FIRST(v_current); i > 0; i = NEXT(v_current, i))
+            {
+                Vertex temp = VERTEX(v_current, i);
+                if (temp.name == endVertex.name) return true;
+                if (temp.mark == 0)
+                {
+                    temp.mark = 1;
+                    bfsQueue.Enqueue(temp);
+                }
+            }
+            
+            v_current.mark = 2;
+            bfsQueue.Dequeue();
+        }
+        return false;
+    }
 
 
     // Конструктор.
@@ -383,7 +419,8 @@ class Edge
 class Vertex
 {
     public string name;     // Имя узла
-    public int mark;     // Название метки
+    public int mark;        // Название метки
+    public int mark2;       // Костыльная метка
 
     // Конструктор.
     public Vertex(string name, int mark)
@@ -410,33 +447,20 @@ class Program
     {
         Graph graph = new Graph();
         
-        graph.ADD_V("A");
-        graph.ADD_V("B");
-        graph.ADD_V("C");
-        graph.ADD_V("D");
-        graph.ADD_V("E");
-        graph.ADD_V("F");
+        graph.ADD_V("1");
+        graph.ADD_V("2");
+        graph.ADD_V("3");
+        graph.ADD_V("4");
+        graph.ADD_V("5");
         
-        graph.ADD_E("A", "B");
-        graph.ADD_E("A", "F");
-        graph.ADD_E("B", "C");
-        graph.ADD_E("C", "A");
-        graph.ADD_E("C", "D");
-        graph.ADD_E("C", "E");
-        graph.ADD_E("F", "D");
+        graph.ADD_E("1", "2");
+        graph.ADD_E("1","3");
+        graph.ADD_E("3", "2");
+        graph.ADD_E("5", "3");
+        graph.ADD_E("4", "5");
+        graph.ADD_E("3", "4");
 
-        graph.PrintEdgeList();
-        
-        graph.DEL_E("C", "A");
-        graph.DEL_E("C", "D");
-        graph.ADD_E("C", "D");
-        graph.ADD_E("C", "A");
-        
-        Console.WriteLine();
-        graph.PrintEdgeList();
-        
-        Console.WriteLine("\n\n");
-        Console.WriteLine(graph.BFS(graph.findVertex("A"), true));
+        Console.WriteLine(graph.BFSWayExist(graph.findVertex("5"), graph.findVertex("2")));
 
     }
 }

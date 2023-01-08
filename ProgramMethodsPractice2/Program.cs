@@ -448,25 +448,9 @@ class Program
 {
     static void Main()
     {
-        Graph graph = new Graph();
-        
-        graph.ADD_V("1");
-        graph.ADD_V("2");
-        graph.ADD_V("3");
-        graph.ADD_V("4");
-        graph.ADD_V("5");
-        
-        graph.ADD_E("1", "2");
-        graph.ADD_E("1","3");
-        graph.ADD_E("3", "2");
-        graph.ADD_E("5", "3");
-        graph.ADD_E("4", "5");
-        graph.ADD_E("3", "4");
-        
-        Console.WriteLine(graph.BFSCyclesCount(graph.findVertex("1"), true));
-        Console.WriteLine();
 
         Graph graph2 = new Graph();
+        Console.WriteLine("GRAPH 1:\n\n");
         
         graph2.ADD_V("A");
         graph2.ADD_V("B");
@@ -483,10 +467,13 @@ class Program
         graph2.ADD_E("C", "D");
         graph2.ADD_E("F", "D");
         
-        Console.WriteLine(graph2.BFSCyclesCount(graph2.findVertex("A"), true));
+        graph2.PrintEdgeList();
+        Console.Write("Cycles: ");
+        Console.WriteLine(graph2.BFSCyclesCount(graph2.findVertex("A")));
         Console.WriteLine();
 
         Graph graph3 = new Graph();
+        Console.WriteLine("GRAPH 2:\n\n");
         
         graph3.ADD_V("A");
         graph3.ADD_V("B");
@@ -505,7 +492,9 @@ class Program
         graph3.ADD_E("F", "G");
         graph3.ADD_E("G", "E");
         
-        Console.WriteLine(graph3.BFSCyclesCount(graph3.findVertex("A"), true));
+        graph3.PrintEdgeList();
+        Console.Write("Cycles: ");
+        Console.WriteLine(graph3.BFSCyclesCount(graph3.findVertex("A")));
 
     }
 }
